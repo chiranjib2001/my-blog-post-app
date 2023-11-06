@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ blog.title }}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+        </ul>
+    </nav>
+
+    <h1>{{ blog.title }}</h1>
+    <p>{{ blog.content }}</p>
+    <p>Author: {{ blog.author.user.username }}</p>
+    <p>Published on: {{ blog.create_timestamp }}</p>
+
+    <a href="{% url 'view_blogs' %}">Back to All Blogs</a>
+</body>
+</html>

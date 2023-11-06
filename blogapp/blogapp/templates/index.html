@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+            <li><a href="{% url 'view_blogs' %}">All Blogs</a></li>
+        </ul>
+    </nav>
+
+    <h1>Welcome to our Blog App</h1>
+
+    <section id="latest-blogs">
+        <h2>Latest Blogs</h2>
+        <ul>
+            {% for blog in latest_blogs %}
+            <li>
+                <h3><a href="{% url 'view_blog_by_id' blog_id=blog.id %}">{{ blog.title }}</a></h3>
+                <p>{{ blog.content }}</p>
+                <p>Author: {{ blog.author.user.username }}</p>
+                <p>Published on: {{ blog.create_timestamp }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+</body>
+</html>

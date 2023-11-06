@@ -1,7 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from .models import UserProfile
+from .models import UserProfile, Blog
+from django.http import JsonResponse, HttpResponse
+
+
+
+
+def view_blog_by_id(request, blog_id):
+    if request.method == "GET":
+        blog = Blog.objects.filter(id=blog_id, delete_flag=False).first()
+
+        if blog:
+            return render(request, 'blog.html', {'blog': blog})
+        else:
+            return JsonResponse({'message': 'Invalid blog_id'}, status=404)
+    else:
+        return HttpResponse("Invalid request method", status=400)
+
+
+def view_blogs(request):
+    latest_blogs = Blog.objects.filter(delete_flag=False).order_by('-create_timestamp')[:5]
+    context = {'latest_blogs': latest_blogs}
+    return render(request, 'index.html', context)
+
+
+def index(request):
+    # Get the latest blogs from the database
+    latest_blogs = Blog.objects.all()[:5]  # Change this query to retrieve the latest blogs as needed
+    context = {
+        'latest_blogs': latest_blogs,
+    }
+    return render(request, 'index.html', context)
 
 
 def login_view(request):
