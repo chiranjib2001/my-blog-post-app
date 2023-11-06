@@ -3,8 +3,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from .models import UserProfile, Blog
 from django.http import JsonResponse, HttpResponse
+from .forms import BlogForm  # Create a Django form for the Blog model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
-
+@user_passes_test(lambda user: user.role in ['author', 'admin'])
+@login_required
+def create_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST)
+        if form.is_valid():
+            blog = form.save()
+            return JsonResponse({
+                'message': 'Blog created successfully',
+                'blog_id': blog.id
+            })
+        else:
+            return JsonResponse({'message': 'Invalid form data'}, status=400)
+    else:
+        form = BlogForm()
+    return render(request, 'create_blog.html', {'form': form})
 
 
 def view_blog_by_id(request, blog_id):
@@ -69,7 +87,7 @@ def register(request):
 
             # Log the user in after registration
             login(request, user)
-            return redirect('home')  # Redirect to a page after successful registration
+            return redirect('index')  # Redirect to a page after successful registration
 
     else:
         form = UserCreationForm()

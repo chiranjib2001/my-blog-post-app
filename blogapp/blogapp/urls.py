@@ -25,5 +25,6 @@ urlpatterns = [
     path('', views.view_blogs, name='index'),
     path('view_blogs/', views.view_blogs, name='view_blogs'),
     path('view_blog_by_id/<int:blog_id>/', views.view_blog_by_id, name='view_blog_by_id'),
+    path('create_blog/', views.create_blog, name='create_blog'),
 
 ]

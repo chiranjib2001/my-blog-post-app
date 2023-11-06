@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Blog</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <!-- Add navigation links as needed -->
+        </ul>
+    </nav>
+
+    <h1>Create a New Blog</h1>
+
+    <form method="post" action="{% url 'create_blog' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="submit" value="Create Blog">
+    </form>
+</body>
+</html>
