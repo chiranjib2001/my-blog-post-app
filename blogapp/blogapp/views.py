@@ -1,7 +1,24 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from .models import UserProfile
+
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        # Authenticate the user
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            # Login the user
+            login(request, user)
+            return redirect('home')  # Redirect to the home page after successful login
+        else:
+            # Handle authentication failure (incorrect login or password)
+            return render(request, 'login.html', {'error_message': 'Incorrect login or password'})
+    return render(request, 'login.html')
+
 
 def register(request):
     if request.method == 'POST':
